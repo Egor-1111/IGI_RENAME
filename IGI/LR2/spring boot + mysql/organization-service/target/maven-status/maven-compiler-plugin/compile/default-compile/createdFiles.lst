@@ -1,0 +1,9 @@
+com\sayedbaladoh\organizationservice\OrganizationServiceApplication.class
+com\sayedbaladoh\organizationservice\service\OrganizationService.class
+com\sayedbaladoh\organizationservice\client\UserClient.class
+com\sayedbaladoh\organizationservice\controller\OrganizationController.class
+com\sayedbaladoh\organizationservice\client\SiteClient.class
+com\sayedbaladoh\organizationservice\model\User.class
+com\sayedbaladoh\organizationservice\repository\OrganizationRepository.class
+com\sayedbaladoh\organizationservice\model\Organization.class
+com\sayedbaladoh\organizationservice\model\Site.class
