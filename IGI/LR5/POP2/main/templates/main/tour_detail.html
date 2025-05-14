@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ tour.title }}</title>
+</head>
+<body>
+    <h1>{{ tour.title }}</h1>
+    <p>Страна: {{ tour.country.name }}</p>
+    <p>Отель: {{ tour.hotel.name }}</p>
+    <p>Город: {{ tour.hotel.city }}</p>
+    <p>Длительность: {{ tour.duration_weeks }} нед.</p>
+    <p>Цена: {{ tour.base_price }} руб. примерно {{converted_price}} USD</p>
+    <p>Описание: {{ tour.description }}</p>
+{% if weather %}
+    <p>Погода в {{ tour.country.capital }}: {{ weather.temp }}°C, {{ weather.desc }}</p>
+{% endif %}
+    {% if tour.image %}
+    <img src="{{ tour.image.url }}" alt="{{ tour.title }}" width="300">
+{% else %}
+    <p>Изображение недоступно.</p>
+{% endif %}
+   <li> <a href="{% url 'tour_list' %}">Назад к списку туров</a></li>
+{% if user.is_authenticated %}
+    <a href="{% url 'book_tour' tour.id %}">Забронировать</a>
+{% else %}
+    <p><a href="{% url 'login' %}">Войдите</a>, чтобы забронировать тур.</p>
+{% endif %}
+</body>
+</html>

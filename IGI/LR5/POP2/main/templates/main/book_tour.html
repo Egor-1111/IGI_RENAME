@@ -1,0 +1,13 @@
+<h1>Бронирование тура</h1>
+
+<p><strong>Тур:</strong> {{ tour.title }} в {{ tour.country.name }}</p>
+<p><strong>Отель:</strong> {{ tour.hotel.name }}</p>
+<p><strong>Цена за одну путевку:</strong> {{ tour.base_price }} BYN</p>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Подтвердить бронирование</button>
+</form>
+
+<a href="{% url 'home' %}">Назад</a>

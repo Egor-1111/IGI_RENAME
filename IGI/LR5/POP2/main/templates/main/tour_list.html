@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Список туров</title>
+</head>
+<body>
+
+    <h1>Список доступных туров</h1>
+
+    <form method="get">
+        <input type="text" name="q" placeholder="Поиск по названию или стране" value="{{ query }}">
+        <select name="sort">
+            <option value="base_price" {% if sort_by == "base_price" %}selected{% endif %}>Сначала дешевые</option>
+            <option value="-base_price" {% if sort_by == "-base_price" %}selected{% endif %}>Сначала дорогие</option>
+        </select>
+        <button type="submit">Поиск</button>
+    </form>
+
+    <hr>
+
+    {% for tour in tours %}
+        <div>
+            {% if tour.image %}
+                <img src="{{ tour.image.url }}" alt="{{ tour.title }}" width="400">
+            {% else %}
+                <p>Изображение недоступно.</p>
+            {% endif %}
+            <h3>{{ tour.title }}</h3>
+            <p>Страна: {{ tour.country.name }}</p>
+            <p>Отель: {{ tour.hotel.name }}</p>
+            <p>Длительность: {{ tour.duration_weeks }} нед.</p>
+            <p>Цена: {{ tour.base_price }} руб.</p>
+            <a href="{% url 'tour_detail' tour.id %}">Подробнее</a>
+        </div>
+        <hr>
+    {% empty %}
+        <p>Нет доступных туров.</p>
+    {% endfor %}
+
+    <a href="{% url 'home' %}">На главную</a>
+</body>
+</html>

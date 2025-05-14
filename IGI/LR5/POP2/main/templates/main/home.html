@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная</title>
+</head>
+<body>
+    <h1>Добро пожаловать в турагентство!</h1>
+    {% if latest_tour %}
+        <h2>Последняя добавленная путёвка:</h2>
+        <p>{{ latest_tour.title }} в {{ latest_tour.country.name }}</p>
+        <p>Длительность: {{ latest_tour.duration_weeks }} нед.</p>
+        <a href="{% url 'tour_detail' latest_tour.id %}">Подробнее</a>
+    {% else %}
+        <p>Нет доступных путёвок.</p>
+    {% endif %}
+        <li><a href="{% url 'profile' %}">Профиль клиента</a></li>
+    {% if user.is_authenticated %}
+    {% if user.employee %}
+        <a href="{% url 'employee_dashboard' %}">Панель сотрудника</a> |
+    {% endif %}
+{% endif %}
+
+    <nav>
+        {% if user.is_authenticated %}
+            {% if user.client %}
+                Здравствуйте, {{ user.client.last_name }} {{ user.client.first_name }} {{ user.client.patronymic }} | <a href="{% url 'logout' %}">Выйти</a>
+            {% else %}
+                Привет, {{ user.username }} | <a href="{% url 'logout' %}">Выйти</a>
+            {% endif %}
+        {% else %}
+            <a href="{% url 'login' %}">Войти</a> | <a href="{% url 'register' %}">Регистрация</a>
+        {% endif %}
+    </nav>
+<ul>
+    <li><a href="{% url 'all_reviews' %}">Посмотреть все отзывы</a></li>
+    <li><a href="{% url 'select_employee' %}">Выбрать сотрудника</a></li>
+    <li> <a href="{% url 'tour_list' %}">Все путёвки</a></li>
+    <li><a href="{% url 'add_review' %}">Оставить отзыв</a></li>
+    <li><a href="{% url 'vacancy_list' %}">Вакансии</a></li>
+    <li><a href="{% url 'tour_chart' %}">Популярные туры в сравнение</a></li>
+    <li><a href="{% url 'user_time_chart' %}">Время проведенное на сайте и среднее время на сайте</a></li>
+    <li><a href="{% url 'time_info' %}">Время и дата, календарь время добавление объектов </a></li>
+
+</ul>
+
+</body>
+</html>

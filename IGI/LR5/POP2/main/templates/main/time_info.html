@@ -1,0 +1,37 @@
+{% load tz %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Дата и время</title>
+</head>
+<body>
+    <h2>Время и дата</h2>
+
+    <p><strong>Текущая дата и время (локально):</strong>
+        {% timezone user_timezone %}
+            {{ now|date:"d/m/Y H:i:s" }}
+        {% endtimezone %}
+    </p>
+
+    <p><strong>Текущая дата и время (UTC):</strong>
+        {{ now|utc|date:"d/m/Y H:i:s" }}
+    </p>
+
+    <h3>Календарь:</h3>
+    <pre>
+{{ calendar_text }}
+    </pre>
+
+    <h3>Данные модели (пример для тура):</h3>
+    {% for tour in tours %}
+    <ul>
+        <li><strong>{{ tour.title }}</strong></li>
+        <li>Создано (локально): {% timezone user_timezone %}{{ tour.created_at|date:"d/m/Y H:i" }}{% endtimezone %}</li>
+        <li>Создано (UTC): {{ tour.created_at|date:"d/m/Y H:i" }}</li>
+
+        <li>Обновлено (локально): {% timezone user_timezone %}{{ tour.updated_at|date:"d/m/Y H:i" }}{% endtimezone %}</li>
+        <li>Обновлено (UTC): {{ tour.updated_at|date:"d/m/Y H:i" }}</li>
+    </ul>
+{% endfor %}
+</body>
+</html>

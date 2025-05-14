@@ -1,0 +1,36 @@
+<h1>Личный кабинет</h1>
+<p>Добро пожаловать, {{ request.user.username }}!</p>
+
+<h2>Ваши заказы</h2>
+<ul>
+    {% for order in orders %}
+        <li>
+            {{ order.tour.title }} – {{ order.departure_date }} –
+            Кол-во: {{ order.quantity }} – Сумма: {{ order.total_price }} BYN
+        </li>
+    {% empty %}
+        <li>Пока нет заказов</li>
+    {% endfor %}
+</ul>
+<h3>Доступные промокоды</h3>
+{% if available_promos %}
+    <ul>
+        {% for promo in available_promos %}
+            <li><strong>{{ promo.code }}</strong> — {{ promo.discount_percent }}% скидка на {{ promo.tour.title }} (до {{ promo.valid_until }})</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Нет доступных промокодов.</p>
+{% endif %}
+
+<h3>Использованные промокоды</h3>
+{% if used_promos %}
+    <ul>
+        {% for promo in used_promos %}
+            <li>{{ promo.code }} — {{ promo.discount_percent }}% на {{ promo.tour.title }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Промокоды ещё не использовались.</p>
+{% endif %}
+<a href="{% url 'home' %}">На главную</a>

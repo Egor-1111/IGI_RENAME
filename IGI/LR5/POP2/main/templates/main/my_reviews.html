@@ -1,0 +1,19 @@
+{% block content %}
+
+  <h2>Мои отзывы</h2>
+  {% if reviews %}
+    <ul>
+      {% for review in reviews %}
+        <li>
+          Тур: {{ review.tour.title }}<br>
+          Оценка: {{ review.rating }}<br>
+          Отзыв: {{ review.text }}<br>
+          Дата: {{ review.created_at }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Вы еще не оставили ни одного отзыва.</p>
+  {% endif %}
+<a href="{% url 'home' %}">На главную</a>
+{% endblock %}

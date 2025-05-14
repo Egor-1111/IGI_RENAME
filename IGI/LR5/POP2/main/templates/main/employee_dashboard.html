@@ -1,0 +1,52 @@
+
+{% block content %}
+  <h2>Панель сотрудника</h2>
+
+  {% if employee %}
+    <p><strong>ФИО:</strong> {{ employee.last_name }} {{ employee.first_name }}</p>
+    <p><strong>Должность:</strong> {{ employee.position }}</p>
+    <p><strong>Телефон:</strong> {{ employee.phone }}</p>
+    <p><strong>Email:</strong> {{ employee.email }}</p>
+<li><a href="{% url 'create_promo' %}">Создать промокод</a></li>
+    {% if user.is_staff %}
+  {% if user.is_staff %}
+  <li><a href="{% url 'tour_create' %}">Добавить тур</a></li>
+  <h3>Список туров:</h3>
+  <ul>
+    {% for tour in tours %}
+      <li>
+        {{ tour.title }} — {{ tour.country.name }} —
+        <a href="{% url 'tour_edit' tour.pk %}">Редактировать</a> |
+        <a href="{% url 'tour_delete' tour.pk %}">Удалить</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
+{% endif %}
+    <h3>Мои клиенты:</h3>
+  {% if clients %}
+    <ul>
+      {% for client in clients %}
+        <li>{{ client.last_name }} {{ client.first_name }} {{ client.patronymic }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>У вас пока нет закреплённых клиентов.</p>
+  {% endif %}
+<h3>Мои Заказы:</h3>
+    {% if orders %}
+      <ul>
+        {% for order in orders %}
+          <li>
+            {{ order.client }} — {{ order.tour }} — {{ order.departure_date }} — {{ order.total_price }} руб.
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>Нет заказов.</p>
+    {% endif %}
+  {% else %}
+    <p>Профиль сотрудника не найден.</p>
+  {% endif %}
+  <a href="{% url 'home' %}">На главную</a>
+{% endblock %}

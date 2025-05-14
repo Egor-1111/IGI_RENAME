@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Список клиентов</title>
+</head>
+<body>
+    <h1>Список клиентов</h1>
+    <ul>
+        {% for client in clients %}
+            <li>{{ client.last_name }} {{ client.first_name }}</li>
+        {% empty %}
+            <li>Нет клиентов.</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'home' %}">На главную</a>
+</body>
+</html>
