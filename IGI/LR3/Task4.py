@@ -11,11 +11,12 @@ c) output all the words in descending order of their length
 """
 
 def decorator(func):
+    
     def wrapper(*str):
         start = time.time()
         result = func(*str)
         end = time.time()
-        print("Execution time", end - start,"seconds")
+        print("Время выполнения", end - start,"секунд")
         return result
     return wrapper
 
@@ -32,7 +33,7 @@ def Task4():
     d_length = [x for x in text_list if x.endswith('d')]
     short = min(d_length,key=len)
     print(f"Б)Самое короткое слово оканчивающиеся на 'd': {short}")
-    print(str.lower.__doc__)
+    #print(str.lower.__doc__)
     sorted_words = sorted(text_list, key=lambda x: (-len(x), x.lower()))
 
     print("в)Слова в порядке убывания их длин  ",", ".join(sorted_words))
