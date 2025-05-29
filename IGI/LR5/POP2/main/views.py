@@ -10,7 +10,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import RegisterForm, SelectEmployeeForm, ReviewForm
 from django.http import HttpResponseForbidden
-from .models import Client, Review,Vacancy,Tour,Employee, Order,PromoCode, UserSessionLog
+from .models import Client, Review,Vacancy,Tour,Employee, Order,PromoCode, UserSessionLog,FAQEntry,CompanyInfo,NewsArticle
 from .forms import OrderForm, TourForm, PromoCodeForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
@@ -19,7 +19,6 @@ import io
 import pandas as pd
 from django.utils import timezone
 import calendar
-from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
@@ -309,8 +308,14 @@ def tour_delete(request, pk):
         return redirect('tour_list')
     return render(request, 'main/tour_confirm_delete.html', {'tour': tour})
 
-
+@login_required
 def user_time_chart(request):
+    user = request.user
+
+    # Проверка: админ или сотрудник
+    if not user.is_staff and not Employee.objects.filter(user=user).exists():
+        return render(request, 'main/access_denied.html')
+
     logs = UserSessionLog.objects.exclude(logout_time__isnull=True)
     data = []
 
@@ -344,17 +349,72 @@ def user_time_chart(request):
     return render(request, 'main/user_time_chart.html', {'chart_data': chart_data})
 
 
+def get_client_ip(request):
+    """Получение реального IP клиента с учетом прокси"""
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR', '')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0].strip()
+    else:
+        ip = request.META.get('REMOTE_ADDR', '')
+    return ip if ip else None
+
+
+def get_timezone_by_ip(ip):
+    """Определение временной зоны по IP через API ip-api.com"""
+    if not ip or ip.startswith(('127.', '10.', '192.168.')):
+        return None  # Пропускаем локальные IP
+
+    try:
+        response = requests.get(
+            f'http://ip-api.com/json/{ip}?fields=timezone',
+            timeout=2
+        )
+        if response.status_code == 200:
+            data = response.json()
+            return data.get('timezone')
+    except requests.RequestException:
+        return None
+
+
 def time_info_view(request):
-    now = timezone.now()
+    # Получаем текущее время в UTC
+    now_utc = timezone.now()
 
-    # Временная зона пользователя (можно получить из профиля или браузера — здесь просто UTC+3 как пример)
-    user_timezone = 'Europe/Moscow'  # заменишь на динамическое значение при необходимости
+    # Получаем IP клиента
+    client_ip = get_client_ip(request)
 
-    # Календарь на текущий месяц в виде текста
+    # Определяем временную зону
+    user_timezone = get_timezone_by_ip(client_ip)
+    if not user_timezone:
+        user_timezone = timezone.get_current_timezone_name()
+
+    # Генерируем календарь
     cal = calendar.TextCalendar(calendar.MONDAY)
-    calendar_text = cal.formatmonth(now.year, now.month)
+    calendar_text = cal.formatmonth(now_utc.year, now_utc.month)
 
-    # Пример одного тура (для отображения дат создания/изменения)
+    # Получаем туры с аннотацией дат
     tours = Tour.objects.all()
 
-    return render(request, 'main/time_info.html', {'now': now,'user_timezone': user_timezone,'calendar_text': calendar_text,'tours': tours})
+    return render(request, 'main/time_info.html', {'now': now_utc,'user_timezone': user_timezone,'calendar_text': calendar_text,'tours': tours,'client_ip': client_ip})
+
+def faq_view(request):
+    faqs = FAQEntry.objects.order_by('-created_at')  # последние вверху
+    return render(request, 'main/faq.html', {'faqs': faqs})
+
+def about_view(request):
+    company = CompanyInfo.objects.first()
+    return render(request, 'main/about.html', {'company': company})
+
+
+def news_list(request):
+    articles = NewsArticle.objects.order_by('-published_at')
+    return render(request, 'main/news_list.html', {'articles': articles})
+
+def news_detail(request, pk):
+    article = get_object_or_404(NewsArticle, pk=pk)
+    return render(request, 'main/news_detail.html', {'article': article})
+
+def contact_list(request):
+    employees = Employee.objects.all()
+    return render(request, 'main/contact_list.html', {'employees': employees})
+

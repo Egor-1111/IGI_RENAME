@@ -1,0 +1,10 @@
+{% block content %}
+<h2>{{ article.title }}</h2>
+<p><strong>Опубликовано:</strong> {{ article.published_at|date:"d/m/Y H:i" }}</p>
+{% if article.image %}
+    <img src="{{ article.image.url }}" style="max-width: 100%;">
+{% endif %}
+<p>{{ article.content }}</p>
+<a href="{% url 'news_list' %}">← Назад к новостям</a>
+{% endblock %}
+<a href="{% url 'home' %}">На главную</a>

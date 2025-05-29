@@ -1,0 +1,16 @@
+{% load tz %}
+<h1>Словарь терминов и понятий (FAQ)</h1>
+
+<ul>
+  {% for entry in faqs %}
+    <li>
+      <strong>Вопрос:</strong> {{ entry.question }}<br>
+      <strong>Ответ:</strong> {{ entry.answer }}<br>
+      <em>Добавлено: {% timezone "Europe/Moscow" %}{{ entry.created_at|date:"d/m/Y H:i" }}{% endtimezone %}</em>
+    </li>
+  {% empty %}
+    <p>Пока нет добавленных вопросов.</p>
+  {% endfor %}
+</ul>
+
+<a href="{% url 'home' %}">На главную</a>

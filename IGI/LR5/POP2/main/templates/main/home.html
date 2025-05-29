@@ -33,10 +33,14 @@
         {% endif %}
     </nav>
 <ul>
+    <li><a href="{% url 'about' %}">О компании</a></li>
+    <li><a href="{% url 'news_list' %}">Новости</a></li>
+    <li><a href="{% url 'contact_list' %}">Контакты</a></li>
     <li><a href="{% url 'all_reviews' %}">Посмотреть все отзывы</a></li>
     <li><a href="{% url 'select_employee' %}">Выбрать сотрудника</a></li>
     <li> <a href="{% url 'tour_list' %}">Все путёвки</a></li>
     <li><a href="{% url 'add_review' %}">Оставить отзыв</a></li>
+    <li><a href="{% url 'faq' %}">FAQ</a></li>
     <li><a href="{% url 'vacancy_list' %}">Вакансии</a></li>
     <li><a href="{% url 'tour_chart' %}">Популярные туры в сравнение</a></li>
     <li><a href="{% url 'user_time_chart' %}">Время проведенное на сайте и среднее время на сайте</a></li>

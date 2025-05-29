@@ -58,6 +58,7 @@ class Employee(models.Model):
     last_name = models.CharField(max_length=50)
     position = models.CharField(max_length=100)
     phone = models.CharField(max_length=20)
+    photo = models.ImageField(upload_to='employee_photos/', blank=True, null=True)
     email = models.EmailField()
     birth_date = models.DateField()
 
@@ -78,6 +79,13 @@ class Tour(models.Model):
     def __str__(self):
         return f"{self.title} в {self.country.name} ({self.duration_weeks} нед.)"
 
+class FAQEntry(models.Model):
+    question = models.CharField(max_length=255)
+    answer = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.question
 
 class Review(models.Model):
     client = models.ForeignKey('Client', on_delete=models.CASCADE)
@@ -126,6 +134,25 @@ class Vacancy(models.Model):
     requirements = models.TextField()
     salary = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+class CompanyInfo(models.Model):
+    logo = models.ImageField(upload_to='company_logos/', blank=True, null=True)
+    history = models.TextField()
+    founding_year = models.PositiveIntegerField()
+    requisites = models.TextField(help_text="Юридические реквизиты")
+
+    def __str__(self):
+        return f"О компании (с {self.founding_year} г.)"
+
+class NewsArticle(models.Model):
+    title = models.CharField(max_length=200, verbose_name="Заголовок")
+    short_description = models.CharField(max_length=255, verbose_name="Краткое описание (одно предложение)")
+    content = models.TextField(verbose_name="Полный текст статьи")
+    image = models.ImageField(upload_to='news_images/', blank=True, null=True, verbose_name="Изображение")
+    published_at = models.DateTimeField(default=timezone.now, verbose_name="Дата публикации")
 
     def __str__(self):
         return self.title

@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path,re_path
 from . import views
 
 urlpatterns = [
@@ -17,13 +17,18 @@ urlpatterns = [
     path('add_review/', views.add_review, name='add_review'),
     path('my_reviews/', views.my_reviews, name='my_reviews'),
     path('create_promo/', views.create_promo_code, name='create_promo'),
-    path('chart/', views.tour_distribution_chart, name='tour_chart'),
-    path('privacy/', views.privacy_policy_view, name='privacy_policy'),
-    path('vacancies/', views.vacancy_list, name='vacancy_list'),
-    path('tours/create/', views.tour_create, name='tour_create'),
+    re_path(r'^chart/$', views.tour_distribution_chart, name='tour_chart'),
+    re_path(r'^privacy/$', views.privacy_policy_view, name='privacy_policy'),
+    re_path(r'^vacancies/$', views.vacancy_list, name='vacancy_list'),
+    re_path(r'^tours/create/$', views.tour_create, name='tour_create'),
     path('tours/<int:pk>/edit/', views.tour_edit, name='tour_edit'),
     path('tours/<int:pk>/delete/', views.tour_delete, name='tour_delete'),
     path('user-time-chart/', views.user_time_chart, name='user_time_chart'),
     path('time_info/', views.time_info_view, name='time_info'),
+    path('faq/', views.faq_view, name='faq'),
+    path('about/', views.about_view, name='about'),
+    path('news/', views.news_list, name='news_list'),
+    path('news/<int:pk>/', views.news_detail, name='news_detail'),
+    path('contacts/', views.contact_list, name='contact_list'),
 ]
 

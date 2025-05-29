@@ -1,0 +1,23 @@
+{% block content %}
+  <h2>Контакты сотрудников</h2>
+  <a href="{% url 'home' %}">На главную</a>
+  <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+    {% for employee in employees %}
+      <div style="border: 1px solid #ccc; padding: 15px; width: 280px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        {% if employee.photo %}
+          <img src="{{ employee.photo.url }}" alt="{{ employee.first_name }}" style="width: 100%; height: auto; margin-bottom: 10px;">
+        {% else %}
+          <div style="width: 100%; height: 200px; background: #eee; display: flex; align-items: center; justify-content: center; color: #999; margin-bottom: 10px;">
+            Нет фото
+          </div>
+        {% endif %}
+        <h3>{{ employee.first_name }} {{ employee.last_name }}</h3>
+        <p><strong>Должность:</strong> {{ employee.position }}</p>
+        <p><strong>Телефон:</strong> {{ employee.phone }}</p>
+        <p><strong>Email:</strong> <a href="mailto:{{ employee.email }}">{{ employee.email }}</a></p>
+        <p><strong>Дата рождения:</strong> {{ employee.birth_date|date:"d/m/Y" }}</p>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}
+

@@ -1,4 +1,5 @@
 {% block content %}
 <h2>Распределение туров по количеству заказов</h2>
 <img src="data:image/png;base64,{{ chart }}" alt="Диаграмма туров">
+<a href="{% url 'home' %}">На главную</a>
 {% endblock %}
